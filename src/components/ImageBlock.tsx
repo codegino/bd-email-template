@@ -1,12 +1,13 @@
 import React from 'react';
 import {Field, ErrorMessage} from 'formik';
-import Image from 'next/image';
 import StyleBuilder from './StyleBuilder';
 
 export type IImageBlock = {
+  id: string;
   src: string;
   type: 'image';
   styles: string;
+  alt?: string;
 };
 
 const ImageBlock = ({value, name}: {value: IImageBlock; name: string}) => {
@@ -29,8 +30,6 @@ const ImageBlock = ({value, name}: {value: IImageBlock; name: string}) => {
         />
       </div>
       <StyleBuilder name={name} />
-
-      <Image src={value.src} alt="yow" width={300} height={300} />
 
       <div className="col">Type: Image</div>
     </div>

@@ -1,10 +1,12 @@
 import React from 'react';
 import {Field, ErrorMessage, FieldArray} from 'formik';
+import {v4 as uuid} from 'uuid';
 import ImageBlock, {IImageBlock} from './ImageBlock';
 import StyleBuilder from './StyleBuilder';
 import TextBlock, {ITextBlock} from './TextBlock';
 
 export type ISectionBlock = {
+  id: string;
   type: 'section';
   flow: 'horizontal' | 'vertical';
   items: Array<ITextBlock | IImageBlock | ISectionBlock>;
@@ -16,29 +18,38 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
 
   const handleAddBlock = push => {
     if (blockType === 'section') {
-      push({
+      const value: ISectionBlock = {
         items: [
           {
             value: 'Some text',
             type: 'text',
+            id: uuid(),
+            styles: '',
           },
         ],
+        id: uuid(),
         flow: 'horizontal',
         type: 'section',
         styles: '',
-      } as ISectionBlock);
+      };
+
+      push(value);
     } else if (blockType === 'image') {
-      push({
+      const value: IImageBlock = {
         src: 'https://drive.google.com/uc?export=view&id=1qDPt-6n2K0cwkCpScSjwq2eogVy3eFuN',
         type: 'image',
         styles: '',
-      } as IImageBlock);
+        id: uuid(),
+      };
+      push(value);
     } else if (blockType === 'text') {
-      push({
+      const value: ITextBlock = {
         value: 'Some text',
         type: 'text',
         styles: '',
-      } as ITextBlock);
+        id: uuid(),
+      };
+      push(value);
     }
   };
 
@@ -49,10 +60,10 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
           {({remove, push}) => {
             return (
               <div>
-                {value.items.map((_, index) => {
+                {value.items.map((item, index) => {
                   const currentValue = value.items[index];
                   return (
-                    <div className="row mb-2 border px-4 py-2" key={index}>
+                    <div className="row mb-2 border px-4 py-2" key={item.id}>
                       {currentValue.type === 'text' && (
                         <TextBlock name={`${name}.items.${index}`} />
                       )}

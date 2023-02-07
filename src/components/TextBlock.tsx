@@ -2,6 +2,7 @@ import {ErrorMessage, Field} from 'formik';
 import StyleBuilder from './StyleBuilder';
 
 export type ITextBlock = {
+  id: string;
   value: string;
   type: 'text';
   styles: string;
