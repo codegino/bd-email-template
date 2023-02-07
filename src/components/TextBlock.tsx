@@ -1,8 +1,10 @@
 import {ErrorMessage, Field} from 'formik';
+import StyleBuilder from './StyleBuilder';
 
 export type ITextBlock = {
   value: string;
   type: 'text';
+  styles: string;
 };
 
 const TextBlock = ({name}: {name: string}) => {
@@ -13,13 +15,18 @@ const TextBlock = ({name}: {name: string}) => {
           Value
         </label>
         <Field
-          name={name}
+          name={`${name}.value`}
           className="w-full border-1 border"
           placeholder="Some text"
           type="text"
         />
-        <ErrorMessage name={name} component="div" className="field-error" />
+        <ErrorMessage
+          name={`${name}.value`}
+          component="div"
+          className="field-error"
+        />
       </div>
+      <StyleBuilder name={`${name}`} />
 
       <div className="col">Type: Text</div>
     </div>

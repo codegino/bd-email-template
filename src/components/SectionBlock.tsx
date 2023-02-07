@@ -1,12 +1,14 @@
 import React from 'react';
 import {Field, ErrorMessage, FieldArray} from 'formik';
 import ImageBlock, {IImageBlock} from './ImageBlock';
+import StyleBuilder from './StyleBuilder';
 import TextBlock, {ITextBlock} from './TextBlock';
 
 export type ISectionBlock = {
   type: 'section';
   flow: 'horizontal' | 'vertical';
   items: Array<ITextBlock | IImageBlock | ISectionBlock>;
+  styles: string;
 };
 
 const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
@@ -23,18 +25,20 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
         ],
         flow: 'horizontal',
         type: 'section',
-      });
+        styles: '',
+      } as ISectionBlock);
     } else if (blockType === 'image') {
       push({
-        value:
-          'https://drive.google.com/uc?export=view&id=1qDPt-6n2K0cwkCpScSjwq2eogVy3eFuN',
+        src: 'https://drive.google.com/uc?export=view&id=1qDPt-6n2K0cwkCpScSjwq2eogVy3eFuN',
         type: 'image',
-      });
+        styles: '',
+      } as IImageBlock);
     } else if (blockType === 'text') {
       push({
         value: 'Some text',
         type: 'text',
-      });
+        styles: '',
+      } as ITextBlock);
     }
   };
 
@@ -50,12 +54,12 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
                   return (
                     <div className="row mb-2 border px-4 py-2" key={index}>
                       {currentValue.type === 'text' && (
-                        <TextBlock name={`${name}.items.${index}.value`} />
+                        <TextBlock name={`${name}.items.${index}`} />
                       )}
                       {currentValue.type === 'image' && (
                         <ImageBlock
                           value={value.items[index] as IImageBlock}
-                          name={`${name}.items.${index}.value`}
+                          name={`${name}.items.${index}`}
                         />
                       )}
                       {currentValue.type === 'section' && (
@@ -103,7 +107,7 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
 
                 <div className="col">
                   <label htmlFor={name} className="text-sm">
-                    Value
+                    Flow direction
                   </label>
                   <Field
                     name={`${name}.flow`}
@@ -121,6 +125,7 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
                     className="field-error"
                   />
                 </div>
+                <StyleBuilder name={name} />
               </div>
             );
           }}

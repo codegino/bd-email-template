@@ -29,11 +29,13 @@ async function registerPartials() {
     }"><p>${data.value}</p></td></tr></table>`;
   });
   Handlebars.registerHelper('imageblock', function (data) {
-    return `<table class="imageblock"><tr><td style=""><img width="100%" src="${data.value}" /></td></tr></table>`;
+    return `<table class="imageblock" style="${
+      data?.styles ?? ''
+    }"><tr><td style=""><img width="100%" src="${data.src}" /></td></tr></table>`;
   });
   Handlebars.registerHelper('multiblock', function (data) {
     return (
-      `<table class="multiblock"><tr>` +
+      `<table class="multiblock" style="${data?.styles ?? ''}"><tr>` +
       data.items
         .map(meta => {
           if (meta.type === 'text') {
@@ -54,7 +56,7 @@ async function registerPartials() {
 
   Handlebars.registerHelper('vmultiblock', function (data) {
     return (
-      `<table class="multiblock">` +
+      `<table class="multiblock"  style="${data?.styles ?? ''}">` +
       data.items
         .map(meta => {
           if (meta.type === 'text') {

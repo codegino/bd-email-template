@@ -12,9 +12,9 @@ const initialValues: BlockElements = {
   contents: {
     items: [
       {
-        value:
-          'https://drive.google.com/uc?export=view&id=1qDPt-6n2K0cwkCpScSjwq2eogVy3eFuN',
+        src: 'https://drive.google.com/uc?export=view&id=1qDPt-6n2K0cwkCpScSjwq2eogVy3eFuN',
         type: 'image',
+        styles: '',
       },
     ],
   },
