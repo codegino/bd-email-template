@@ -22,21 +22,18 @@ async function registerPartials() {
 
   Handlebars.registerPartial('header', headerSource);
   Handlebars.registerPartial('footer', footerSource);
-  Handlebars.registerHelper('list', function (items, options) {
-    const itemsAsHtml = items.map(item => '<li>' + options.fn(item) + '</li>');
-    return '<ul>\n' + itemsAsHtml.join('\n') + '\n</ul>';
-  });
+
   Handlebars.registerHelper('textblock', function (data) {
-    return `<table><tr><td style="${
+    return `<table class="textblock"><tr><td style="${
       data?.styles ?? ''
     }"><p>${data.value}</p></td></tr></table>`;
   });
   Handlebars.registerHelper('imageblock', function (data) {
-    return `<table><tr><td style=""><img width="100%" src="${data.value}" /></td></tr></table>`;
+    return `<table class="imageblock"><tr><td style=""><img width="100%" src="${data.value}" /></td></tr></table>`;
   });
   Handlebars.registerHelper('multiblock', function (data) {
     return (
-      `<table><tr>` +
+      `<table class="multiblock"><tr>` +
       data.items
         .map(meta => {
           if (meta.type === 'text') {
@@ -57,7 +54,7 @@ async function registerPartials() {
 
   Handlebars.registerHelper('vmultiblock', function (data) {
     return (
-      `<table>` +
+      `<table class="multiblock">` +
       data.items
         .map(meta => {
           if (meta.type === 'text') {
@@ -81,86 +78,23 @@ async function registerPartials() {
 
 export default async function handler(req, res: NextApiResponse) {
   await registerPartials();
-  const {name, imgSrc} = req.body;
-
   const layoutSource = await fs.readFile(layoutPath, 'utf-8');
 
   const layoutTemplate = Handlebars.compile(layoutSource);
 
-  const commonData = {
-    header: {
-      title: `Hello World ${name}`,
-    },
-    content: [
-      {
-        type: 'text',
-        value: 'HEADER',
-      },
-      {
-        type: 'image',
-        value: imgSrc,
-      },
-      {
-        type: 'section',
-        items: [
-          {
-            type: 'text',
-            value: 'inner something 1',
-          },
-          {
-            type: 'image',
-            value: imgSrc,
-          },
-        ],
-      },
-      {
-        type: 'section',
-        items: [
-          {
-            type: 'image',
-            value: imgSrc,
-          },
-          {
-            type: 'section',
-            flow: 'vertical',
-            items: [
-              {
-                type: 'text',
-                value: 'inner something 1',
-              },
-              {
-                type: 'image',
-                value: imgSrc,
-              },
-              {
-                type: 'text',
-                value: 'inner something 1',
-              },
-              {
-                type: 'text',
-                value: 'inner something 2',
-              },
-              {
-                type: 'text',
-                value: 'inner something 3',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
+  const commonData = req.body;
 
-  const contentSource = commonData.content
+  const contentSource = commonData.contents
     .map((meta, index) => {
       if (meta.type === 'text') {
-        return `<tr><td>{{#textblock content.[${index}] }} {{/textblock}}</td></tr>`;
+        return `<tr><td>{{#textblock contents.[${index}] }} {{/textblock}}</td></tr>`;
       } else if (meta.type === 'image') {
-        return `<tr><td>{{#imageblock content.[${index}] }} {{/imageblock}}</td></tr>`;
+        return `<tr><td>{{#imageblock contents.[${index}] }} {{/imageblock}}</td></tr>`;
       } else if (meta.type === 'section') {
-        return `<tr><td>{{#multiblock content.[${index}] }} {{/multiblock}}</td></tr>`;
-      } else if (meta.type === 'vsection') {
-        return `<tr><td>{{#vmultiblock content.[${index}] }} {{/vmultiblock}}</td></tr>`;
+        if (meta.flow === 'vertical') {
+          return `<tr><td>{{#vmultiblock contents.[${index}] }} {{/vmultiblock}}</td></tr>`;
+        }
+        return `<tr><td>{{#multiblock contents.[${index}] }} {{/multiblock}}</td></tr>`;
       }
     })
     .join('\n');
