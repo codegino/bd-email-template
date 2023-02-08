@@ -53,7 +53,9 @@ const EmailBuilderForm = () => {
           <div>
             <h1>Email Builder</h1>
             <Form>
-              <SectionBlock value={values.contents} name="contents" />
+              <div className="max-h-[90vh] overflow-auto">
+                <SectionBlock value={values.contents} name="contents" />
+              </div>
               <div className="mt-4">
                 <button
                   type="submit"

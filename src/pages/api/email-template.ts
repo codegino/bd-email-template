@@ -1,7 +1,10 @@
 import {promises as fs} from 'fs';
 import Handlebars from 'handlebars';
-import {NextApiResponse} from 'next';
+import {NextApiResponse, NextApiRequest} from 'next';
 import path from 'path';
+import {ISectionBlock} from '../../components/SectionBlock';
+import {ITextBlock} from '../../components/TextBlock';
+import {IImageBlock} from './../../components/ImageBlock';
 
 const layoutPath = path.resolve(
   process.cwd(),
@@ -24,19 +27,21 @@ async function registerPartials() {
   Handlebars.registerPartial('footer', footerSource);
 
   Handlebars.registerHelper('textblock', function (data) {
-    return `<table class="textblock"><tr><td style="${
+    return `<table class="textblock" cellPadding="0"
+    cellSpacing="0" border="0"><tr><td><p  style="${
       data?.styles ?? ''
-    }"><p>${data.value}</p></td></tr></table>`;
+    }">${data.value}</p></td></tr></table>`;
   });
   Handlebars.registerHelper('imageblock', function (data) {
-    return `<table class="imageblock" style="${
+    return `<table class="imageblock" cellPadding="0"
+    cellSpacing="0" border="0"><tr><td><img width="100%" style="${
       data?.styles ?? ''
-    }"><tr><td style=""><img width="100%" src="${data.src}" /></td></tr></table>`;
+    }" src="${data.src}" /></td></tr></table>`;
   });
   Handlebars.registerHelper('multiblock', function (data) {
-    return (
-      `<table class="multiblock" style="${data?.styles ?? ''}"><tr>` +
-      data.items
+    return `<table cellPadding="0" cellSpacing="0" border="0"
+      class="multiblock" style="${data?.styles ?? ''}"><tr>
+      ${data.items
         .map(meta => {
           if (meta.type === 'text') {
             return `<td>${Handlebars.helpers.textblock(meta)}</td>`;
@@ -49,14 +54,16 @@ async function registerPartials() {
             return `<td>${Handlebars.helpers.multiblock(meta)}</td>`;
           }
         })
-        .join('\n') +
-      `</tr></table>`
-    );
+        .join('\n')}
+      </tr></table>`;
   });
 
   Handlebars.registerHelper('vmultiblock', function (data) {
     return (
-      `<table class="multiblock"  style="${data?.styles ?? ''}">` +
+      `<table cellPadding="0"
+      cellSpacing="0" border="0" class="multiblock" style="${
+        data?.styles ?? ''
+      }">` +
       data.items
         .map(meta => {
           if (meta.type === 'text') {
@@ -78,16 +85,21 @@ async function registerPartials() {
   });
 }
 
-export default async function handler(req, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   await registerPartials();
   const layoutSource = await fs.readFile(layoutPath, 'utf-8');
 
   const layoutTemplate = Handlebars.compile(layoutSource);
 
-  const commonData = req.body;
+  const commonData = req.body as {
+    contents: (ISectionBlock | ITextBlock | IImageBlock)[];
+  };
 
   const contentSource = commonData.contents
-    .map((meta, index) => {
+    .map((meta, index: number) => {
       if (meta.type === 'text') {
         return `<tr><td>{{#textblock contents.[${index}] }} {{/textblock}}</td></tr>`;
       } else if (meta.type === 'image') {

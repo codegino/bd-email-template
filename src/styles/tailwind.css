@@ -4,10 +4,12 @@
 
 .multiblock {
   background-color: white;
+  width: 100%;
 }
 
 .textblock {
   background-color: white;
+  margin: 0;
   width: 100%;
 }
 

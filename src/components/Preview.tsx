@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
+import {toCSS, toJSON} from 'cssjson';
 import {IBuilderElements} from './EmailBuilderForm';
 import {IImageBlock} from './ImageBlock';
 import {ISectionBlock} from './SectionBlock';
@@ -7,11 +8,11 @@ import {ITextBlock} from './TextBlock';
 
 const TextBlockPreview = ({value}: {value: ITextBlock}) => {
   return (
-    <table className="textblock">
+    <table className="textblock" cellPadding={0} cellSpacing={0} border={0}>
       <tbody>
         <tr>
           <td>
-            <p>{value.value}</p>
+            <p style={toJSON(value.styles).attributes}>{value.value}</p>
           </td>
         </tr>
       </tbody>
@@ -21,11 +22,15 @@ const TextBlockPreview = ({value}: {value: ITextBlock}) => {
 
 const ImageBlockPreview = ({value}: {value: IImageBlock}) => {
   return (
-    <table className="textblock">
+    <table className="textblock" cellPadding={0} cellSpacing={0} border={0}>
       <tbody>
         <tr>
           <td>
-            <img src={value.src} alt={value.alt} />
+            <img
+              src={value.src}
+              alt={value.alt}
+              style={toJSON(value.styles).attributes}
+            />
           </td>
         </tr>
       </tbody>
@@ -36,7 +41,13 @@ const ImageBlockPreview = ({value}: {value: IImageBlock}) => {
 const SectionBlockPreview = ({value}: {value: ISectionBlock}) => {
   if (value.flow === 'vertical') {
     return (
-      <table className="multiblock">
+      <table
+        className="multiblock"
+        cellPadding="0"
+        cellSpacing="0"
+        border={0}
+        style={toJSON(value.styles).attributes}
+      >
         <tbody>
           {value.items.map(item => {
             return (
@@ -56,7 +67,7 @@ const SectionBlockPreview = ({value}: {value: ISectionBlock}) => {
     );
   } else {
     return (
-      <table className="multiblock">
+      <table className="multiblock" style={toJSON(value.styles).attributes}>
         <tbody>
           <tr>
             {value.items.map(item => {

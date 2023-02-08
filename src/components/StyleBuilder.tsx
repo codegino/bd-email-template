@@ -12,6 +12,7 @@ const StyleBuilder = ({name}) => {
         className="w-full border-1 border"
         placeholder="Add some styles"
         type="text"
+        as="textarea"
       />
     </div>
   );
