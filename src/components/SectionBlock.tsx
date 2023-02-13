@@ -25,6 +25,7 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
             type: 'text',
             id: uuid(),
             styles: '',
+            tag: 'p',
           },
         ],
         id: uuid(),
@@ -47,6 +48,7 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
         value: 'Some text',
         type: 'text',
         styles: '',
+        tag: 'p',
         id: uuid(),
       };
       push(value);

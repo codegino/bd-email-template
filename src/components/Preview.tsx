@@ -7,12 +7,14 @@ import {ISectionBlock} from './SectionBlock';
 import {ITextBlock} from './TextBlock';
 
 const TextBlockPreview = ({value}: {value: ITextBlock}) => {
+  const Tag = value.tag;
+
   return (
     <table className="textblock" cellPadding={0} cellSpacing={0} border={0}>
       <tbody>
         <tr>
           <td>
-            <p style={toJSON(value.styles).attributes}>{value.value}</p>
+            <Tag style={toJSON(value.styles).attributes}>{value.value}</Tag>
           </td>
         </tr>
       </tbody>

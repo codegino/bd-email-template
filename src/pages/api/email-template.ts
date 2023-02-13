@@ -28,9 +28,9 @@ async function registerPartials() {
 
   Handlebars.registerHelper('textblock', function (data) {
     return `<table class="textblock" cellPadding="0"
-    cellSpacing="0" border="0"><tr><td><p  style="${
-      data?.styles ?? ''
-    }">${data.value}</p></td></tr></table>`;
+    cellSpacing="0" border="0"><tr><td><${
+      data.tag
+    }  style="${data?.styles ?? ''}">${data.value}<${data.tag} /></td></tr></table>`;
   });
   Handlebars.registerHelper('imageblock', function (data) {
     return `<table class="imageblock" cellPadding="0"
