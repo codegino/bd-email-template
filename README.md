@@ -18,9 +18,3 @@ yarn install
 ```sh
 yarn dev
 ```
-
-### Running Storybook
-
-```sh
-yarn storybook
-```

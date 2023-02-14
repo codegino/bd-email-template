@@ -9,6 +9,7 @@ export type ISectionBlock = {
   id: string;
   type: 'section';
   flow: 'horizontal' | 'vertical';
+  vAlign?: 'top' | 'middle' | 'bottom';
   items: Array<ITextBlock | IImageBlock | ISectionBlock>;
   styles: string;
 };
@@ -40,6 +41,8 @@ const SectionBlock = ({value, name}: {value: ISectionBlock; name: string}) => {
         src: 'https://drive.google.com/uc?export=view&id=1qDPt-6n2K0cwkCpScSjwq2eogVy3eFuN',
         type: 'image',
         styles: '',
+        height: 100,
+        width: 100,
         id: uuid(),
       };
       push(value);

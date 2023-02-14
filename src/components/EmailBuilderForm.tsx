@@ -2,6 +2,7 @@ import React from 'react';
 import {Formik, Form} from 'formik';
 import dynamic from 'next/dynamic';
 import {v4 as uuid} from 'uuid';
+import {firstEmail} from '../email-templates/first-email';
 import SectionBlock, {ISectionBlock} from './SectionBlock';
 
 const Preview = dynamic(() => import('./Preview'), {ssr: false});
@@ -12,18 +13,11 @@ export type IBuilderElements = {
 
 const initialValues: IBuilderElements = {
   contents: {
-    items: [
-      {
-        src: 'https://drive.google.com/uc?export=view&id=1qDPt-6n2K0cwkCpScSjwq2eogVy3eFuN',
-        type: 'image',
-        styles: '',
-        id: uuid(),
-      },
-    ],
     flow: 'vertical',
     type: 'section',
     styles: '',
     id: uuid(),
+    items: firstEmail,
   },
 };
 
