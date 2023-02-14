@@ -31,7 +31,9 @@ const ImageBlockPreview = ({value}: {value: IImageBlock}) => {
             <img
               src={value.src}
               alt={value.alt}
-              style={toJSON(value.styles).attributes}
+              height={value.height}
+              width={value.width}
+              style={{...toJSON(value.styles).attributes, height: value.height}}
             />
           </td>
         </tr>
@@ -93,44 +95,40 @@ const SectionBlockPreview = ({value}: {value: ISectionBlock}) => {
 const Preview = ({values}: {values: IBuilderElements}) => {
   return (
     <div className="w-full h-full">
-      <table
-        width="100%"
-        border={0}
-        cellPadding="0"
-        cellSpacing="0"
-        bgcolor="#f0f0f0"
-      >
-        <tr>
-          <td>
-            <table
-              align="center"
-              width="600"
-              border={0}
-              cellPadding="0"
-              cellSpacing="0"
-            >
-              <tbody>
-                {values.contents.items.map((item, index) => {
-                  return (
-                    <tr key={item.id}>
-                      <td>
-                        {item.type === 'image' && (
-                          <ImageBlockPreview value={item} />
-                        )}
-                        {item.type === 'text' && (
-                          <TextBlockPreview value={item} />
-                        )}
-                        {item.type === 'section' && (
-                          <SectionBlockPreview value={item} />
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </td>
-        </tr>
+      <table width="100%" border={0} cellPadding="0" cellSpacing="0">
+        <tbody>
+          <tr>
+            <td>
+              <table
+                align="center"
+                width="600"
+                border={0}
+                cellPadding="0"
+                cellSpacing="0"
+              >
+                <tbody>
+                  {values.contents.items.map((item, index) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          {item.type === 'image' && (
+                            <ImageBlockPreview value={item} />
+                          )}
+                          {item.type === 'text' && (
+                            <TextBlockPreview value={item} />
+                          )}
+                          {item.type === 'section' && (
+                            <SectionBlockPreview value={item} />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );

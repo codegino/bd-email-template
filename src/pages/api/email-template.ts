@@ -34,9 +34,9 @@ async function registerPartials() {
   });
   Handlebars.registerHelper('imageblock', function (data) {
     return `<table class="imageblock" cellPadding="0"
-    cellSpacing="0" border="0"><tr><td><img width="100%" style="${
-      data?.styles ?? ''
-    }" src="${data.src}" /></td></tr></table>`;
+    cellSpacing="0" border="0"><tr><td><img width="${
+      data.width
+    }" height="${data.height}" style="${data?.styles ?? ''}" src="${data.src}" /></td></tr></table>`;
   });
   Handlebars.registerHelper('multiblock', function (data) {
     return `<table cellPadding="0" cellSpacing="0" border="0"
